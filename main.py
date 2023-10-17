@@ -1,23 +1,29 @@
 import json
 import boto3
+from datetime import datetime
+
 
 client = boto3.client('dynamodb')
 fifa_table = 'Daily_FIFA'
+
+now_saopaulo = int(datetime.now().timestamp())
 
 def lambda_handler(event, context):
     print(f'Evento: {event}')
     
     id = event['dfifa_id']
-    vitorias = event['vitorias']
-    empates = event['empates']
-    derrotas = event['derrotas']
+    meu_placar = event['meu_placar']
+    dele_placar = event['dele_placar']
+    competicao = event['competição']
+    moedas = event['moedas']
     
     raw_dict = {
         'dfifa_id': {'S': id},
-        '__typename': {'S': f"user#{id}"},
-        'vitorias': {'N': f'{vitorias}'},
-        'empates': {'N': f'{empates}'},
-        'derrotas': {'N': f'{derrotas}'}
+        'competicao': {'S': competicao},
+        'gols_favor': {'N': f'{meu_placar}'},
+        'gols_contra': {'N': f'{dele_placar}'},
+        'moedas': {'N': f'{moedas}'},
+        'day&time': {'S': f"{now_saopaulo}"}
     }
     
     response = creating_item_ddb(raw_dict)
@@ -29,8 +35,7 @@ def lambda_handler(event, context):
         }
     else:
         return {
-            'Operação': "Falha!",
-            'Item': raw_dict
+            'Operação': "Falha!"
         }
     
 def creating_item_ddb(raw_dict: dict):
