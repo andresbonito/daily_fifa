@@ -29,7 +29,7 @@ def make_request(raw_dict: dict):
     }
 
     # Enviar a requisição POST
-    response = requests.post(url, data=dados)
+    response = requests.post(url, json=dados)
     print(response.text)
 
     # Verificar a resposta
