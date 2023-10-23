@@ -16,6 +16,7 @@ def lambda_handler(event, context):
     dele_placar = event['dele_placar']
     competicao = event['competição']
     moedas = event['moedas']
+    penaltis = str(event['penaltis'])
     
     raw_dict = {
         'dfifa_id': {'S': id},
@@ -23,7 +24,8 @@ def lambda_handler(event, context):
         'gols_favor': {'N': f'{meu_placar}'},
         'gols_contra': {'N': f'{dele_placar}'},
         'moedas': {'N': f'{moedas}'},
-        'day&time': {'S': f"{now_saopaulo}"}
+        'day&time': {'S': f"{now_saopaulo}"},
+        'penaltis': {'S': penaltis}
     }
     
     response = creating_item_ddb(raw_dict)
