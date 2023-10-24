@@ -18,6 +18,18 @@ def lambda_handler(event, context):
     moedas = event['moedas']
     penaltis = str(event['penaltis'])
     
+    if competicao not in ['Rivals', 'WL', 'KWL']:
+        return {
+            'statusCode': 400,
+            'message': 'Esta competicão não existe.'
+        }
+        
+    if meu_placar < 0 or dele_placar < 0:
+        return {
+            'statusCode': 400,
+            'message': 'Não existe placar negativo.'
+        }
+    
     raw_dict = {
         'dfifa_id': {'S': id},
         'competicao': {'S': competicao},
