@@ -69,13 +69,15 @@ def obter_resumo_por_competicao(competicao):
     if response.status_code == 200:
         # Parse da resposta JSON
         resumo_competicao = json.loads(response.text)['message']
-        print(resumo_competicao)
         resumo_competicao_label.config(text="Resultados por competição:\n"
                                           f"Vitórias: {resumo_competicao['Vitorias']}\n"
                                           f"Empates: {resumo_competicao['Empates']}\n"
                                           f"Derrotas: {resumo_competicao['Derrotas']}\n"
                                           f"Total arrecadado: {resumo_competicao['Total arrecadado']}\n"
-                                          f"Quits: {resumo_competicao['Quits']}")
+                                          f"Quits: {resumo_competicao['Quits']}\n"
+                                          f"Gols marcados: {resumo_competicao['Gols Marcados']}\n"
+                                          f"Gols sofridos: {resumo_competicao['Gols Sofridos']}\n"
+                                          f"Saldo: {resumo_competicao['Saldo']}\n")
     else:
         resumo_competicao_label.config(text=f"Erro na requisição. Código de status: {response.status_code}")
 
@@ -131,15 +133,10 @@ entry_penalti.pack()
 
 def identificar_valores():
     gols_favor = entry_meu_placar.get()
-    print(f'Gols Favor: {gols_favor}')
     gols_contra = entry_placar_dele.get()
-    print(f'Gols Contra: {gols_contra}')
     moedas = entry_moedas.get()
-    print(f'Moedas: {moedas}')
     competicao = entry_competicao.get()
-    print(f'Competicao: {competicao}')
     penaltis = entry_penalti.get()
-    print(f'Penaltis: {penaltis}')
 
     if competicao not in ['Rivals', 'WL', 'KWL']:
         resultado_label.config(text=f'Competicao informada está incorreta!')
