@@ -53,7 +53,12 @@ def obter_resumo_do_dia(comeco, fim):
                                   f"Empates: {resumo_dia['Resultados do dia']['Empates']}\n"
                                   f"Derrotas: {resumo_dia['Resultados do dia']['Derrotas']}\n"
                                   f"Total arrecadado: {resumo_dia['Resultados do dia']['Total arrecadado']}\n"
-                                  f"Quits: {resumo_dia['Resultados do dia']['Quits']}")
+                                  f"Quits: {resumo_dia['Resultados do dia']['Quits']}\n"
+                                  f"Gols Marcados: {resumo_dia['Resultados do dia']['Gols Marcados']}\n"
+                                  f"Gols Sofridos: {resumo_dia['Resultados do dia']['Gols Sofridos']}\n"
+                                  f"Saldo: {resumo_dia['Resultados do dia']['Saldo']}\n"
+                                  
+                                  )
     else:
         resumo_label.config(text="Erro na requisição. Código de status: " + str(response.status_code))
 

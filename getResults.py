@@ -24,6 +24,8 @@ def send_results(raw_list: list):
     derrotas = 0
     total_moedas = 0
     quits = 0
+    gols_a_favor = 0
+    gols_a_contra = 0
     
     for item in raw_list:
         gols_favor = int(item['gols_favor'])
@@ -41,13 +43,19 @@ def send_results(raw_list: list):
             quits += 1
         
         total_moedas += moedas
+        gols_a_favor += gols_favor
+        gols_a_contra += gols_contra
+        saldo = gols_a_favor - gols_a_contra
         
     resp = {
         "Vitorias": vitorias,
         "Empates": empates,
         "Derrotas": derrotas,
         "Total arrecadado": total_moedas,
-        "Quits": quits
+        "Quits": quits,
+        "Gols Marcados": gols_a_favor,
+        "Gols Sofridos": gols_a_contra,
+        "Saldo": saldo
     }
     
     return resp
