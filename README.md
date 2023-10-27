@@ -15,3 +15,5 @@ E os resultados são postados utilizando uma requisição POST.<br>
 Para a interface grafica, foi criado uma janela com a Biblioteca<br>
 Python Tkinter, e lá são passados os parametros necessarios para<br>
 o preenchimento dos dados.
+
+![image](https://github.com/andresbonito/daily_fifa/assets/79462477/12526670-72ad-4685-b176-5f57c893bcfe)
