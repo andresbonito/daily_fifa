@@ -21,7 +21,8 @@ def postar_resultado(raw_dict: dict):
         "dele_placar": raw_dict['gols_contra'],
         "moedas": raw_dict['moedas'],
         "competição": raw_dict['competicao'],
-        "penaltis": raw_dict['penaltis']
+        "penaltis": raw_dict['penaltis'],
+        "semana": raw_dict['semana']
     }
 
     # Enviar a requisição POST
@@ -56,9 +57,7 @@ def obter_resumo_do_dia(comeco, fim):
                                   f"Quits: {resumo_dia['Resultados do dia']['Quits']}\n"
                                   f"Gols Marcados: {resumo_dia['Resultados do dia']['Gols Marcados']}\n"
                                   f"Gols Sofridos: {resumo_dia['Resultados do dia']['Gols Sofridos']}\n"
-                                  f"Saldo: {resumo_dia['Resultados do dia']['Saldo']}\n"
-                                  
-                                  )
+                                  f"Saldo: {resumo_dia['Resultados do dia']['Saldo']}\n")
     else:
         resumo_label.config(text="Erro na requisição. Código de status: " + str(response.status_code))
 
@@ -85,6 +84,30 @@ def obter_resumo_por_competicao(competicao):
                                           f"Saldo: {resumo_competicao['Saldo']}\n")
     else:
         resumo_competicao_label.config(text=f"Erro na requisição. Código de status: {response.status_code}")
+
+def obter_resumo_por_semana(semana):
+    # Substitua 'URL_DA_API' pela URL correta para obter o resumo por semana.
+    url_competicao = os.getenv('week_api')
+    
+    # Parâmetros para a requisição (se necessário)
+    parametros = {'semana': int(semana)}
+    
+    response = requests.get(url_competicao, json=parametros)
+    
+    if response.status_code == 200:
+        # Parse da resposta JSON
+        resumo_semana = json.loads(response.text)['message']
+        resumo_semana_label.config(text="Resultados por competição:\n"
+                                          f"Vitórias: {resumo_semana['Vitorias']}\n"
+                                          f"Empates: {resumo_semana['Empates']}\n"
+                                          f"Derrotas: {resumo_semana['Derrotas']}\n"
+                                          f"Total arrecadado: {resumo_semana['Total arrecadado']}\n"
+                                          f"Quits: {resumo_semana['Quits']}\n"
+                                          f"Gols marcados: {resumo_semana['Gols Marcados']}\n"
+                                          f"Gols sofridos: {resumo_semana['Gols Sofridos']}\n"
+                                          f"Saldo: {resumo_semana['Saldo']}\n")
+    else:
+        resumo_semana_label.config(text=f"Erro na requisição. Código de status: {response.status_code}")
 
 # =======================
 # 
@@ -136,12 +159,18 @@ label_penalti.pack()
 entry_penalti = tk.Entry(frame_resultado)
 entry_penalti.pack()
 
+label_week = tk.Label(frame_resultado, text="Semana:")
+label_week.pack()
+entry_week = tk.Entry(frame_resultado)
+entry_week.pack()
+
 def identificar_valores():
     gols_favor = entry_meu_placar.get()
     gols_contra = entry_placar_dele.get()
     moedas = entry_moedas.get()
     competicao = entry_competicao.get()
     penaltis = entry_penalti.get()
+    semana = entry_week.get()
 
     if competicao not in ['Rivals', 'WL', 'KWL']:
         resultado_label.config(text=f'Competicao informada está incorreta!')
@@ -160,13 +189,14 @@ def identificar_valores():
         "gols_contra": gols_contra,
         "moedas": moedas,
         "competicao": competicao,
-        "penaltis": penaltis
+        "penaltis": penaltis,
+        "semana": semana
     }
 
     postar_resultados = postar_resultado(response)
 
     resultado_label.config(
-        text=f"Gols Favor: {gols_favor}, Gols Contra: {gols_contra}, Moedas: {moedas}, Competição: {competicao}, Penaltis: {penaltis}")
+        text=f"Gols Favor: {gols_favor}, Gols Contra: {gols_contra}, Moedas: {moedas},\n Competição: {competicao}, Penaltis: {penaltis}, Semana {semana}")
 
     return postar_resultados
 
@@ -216,11 +246,21 @@ resumo_com_parametros_button.pack()
 resumo_label = tk.Label(frame, text="")
 resumo_label.pack()
 
+# =========================
+# 
+# = Resumo por Competição = 
+# 
+# =========================
+
 # Nova label para verificar resumo por competição
 label_competicao2 = tk.Label(frame, text="Competição:")
 label_competicao2.pack()
 entry_competicao2 = tk.Entry(frame)
 entry_competicao2.pack()
+
+# Label para exibir o resumo por competição
+resumo_competicao_label = tk.Label(frame, text="")
+resumo_competicao_label.pack()
 
 # Botão para obter o resumo por competição
 def obter_resumo_com_competicao():
@@ -231,8 +271,29 @@ def obter_resumo_com_competicao():
 resumo_competicao_button = tk.Button(frame, text="Resumo por Competição", command=obter_resumo_com_competicao)
 resumo_competicao_button.pack()
 
-# Label para exibir o resumo por competição
-resumo_competicao_label = tk.Label(frame, text="")
-resumo_competicao_label.pack()
+# =========================
+# 
+# = = Resumo por Semana = =
+# 
+# =========================
+
+# Nova label para verificar resumo por semana
+label_semana = tk.Label(frame, text="Semana:")
+label_semana.pack()
+entry_semana = tk.Entry(frame)
+entry_semana.pack()
+
+# Botão para obter o resumo por semana
+def obter_resumo_com_semana():
+    semana = entry_semana.get()
+    obter_resumo_por_semana(semana)
+
+# Botão para obter o resumo por semana
+resumo_semana_button = tk.Button(frame, text="Resumo por Semana", command=obter_resumo_com_semana)
+resumo_semana_button.pack()
+
+# Label para exibir o resumo por semana
+resumo_semana_label = tk.Label(frame, text="")
+resumo_semana_label.pack()
 
 janela.mainloop()

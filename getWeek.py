@@ -7,16 +7,9 @@ fifa_table = 'Daily_FIFA'
 def lambda_handler(event, context):
     print(f'Evento: {event}')
     
-    competicao = event['competicao']
-    params_allowed = ['WL', 'Rivals', 'KWL']
+    semana = f"{event['semana']}"
     
-    if competicao not in params_allowed:
-        return {
-            'statusCode': 400,
-            'message': 'O parametro enviado não corresponde a nenhum valor valido.' 
-        }
-    
-    response = scan_competition(competicao)
+    response = scan_competition(semana)
     
     new_response = clean_data(response)
     
@@ -28,14 +21,14 @@ def lambda_handler(event, context):
         }
 
 
-def scan_competition(competition):
-    expressao_filtro = "#competicao = :competicao"
+def scan_competition(semana):
+    expressao_filtro = "#semana = :semana"
     
     valores = {
-        ':competicao': {'S': competition}
+        ':semana': {'S': f'semana#{semana}'}
     }
     nomes_atributo = {
-        '#competicao': 'competicao'
+        '#semana': 'semana'
     }
     
     resultado = dynamodb.scan(
@@ -74,6 +67,7 @@ def clean_data(raw_list: list):
     return new_raw_list
 
 def send_results(raw_list: list):
+    print(raw_list)
     vitorias = 0
     empates = 0
     derrotas = 0
