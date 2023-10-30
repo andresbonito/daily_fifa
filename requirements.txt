@@ -1,0 +1,6 @@
+os
+requests
+json
+uuid
+tkinter
+boto3
