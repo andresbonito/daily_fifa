@@ -8,7 +8,8 @@ fifa_table = 'Daily_FIFA'
 def lambda_handler(event, context):
     print(f'Evento: {event}')
     
-    day_scan = scan_day(event['comeco'], event['fim'])
+    day_scan = scan_day(event['data'])
+    print(day_scan)
     
     data_clean = clean_data(day_scan)
     
@@ -31,16 +32,22 @@ def send_results(raw_list: list):
         gols_favor = int(item['gols_favor'])
         gols_contra = int(item['gols_contra'])
         moedas = int(item['moedas'])
+        penaltis = item['penaltis']
         
         if gols_favor > gols_contra:
             vitorias += 1
         elif gols_favor < gols_contra:
             derrotas += 1
-        elif gols_favor == gols_contra:
+        elif gols_favor == gols_contra and penaltis == '-':
             empates += 1
             
         if moedas == 0:
             quits += 1
+            
+        if penaltis == 'd':
+            derrotas += 1
+        elif penaltis == 'v':
+            vitorias += 1
         
         total_moedas += moedas
         gols_a_favor += gols_favor
@@ -61,15 +68,14 @@ def send_results(raw_list: list):
     return resp
     
 
-def scan_day(first_time, last_time):
-    expressao_filtro = "#dayetime >= :valor_inicial AND #dayetime <= :valor_final"
+def scan_day(data):
+    expressao_filtro = "#dayetime = :valor_inicial"
     
     valores = {
-        ':valor_inicial': {'S': first_time},
-        ':valor_final': {'S': last_time}
+        ':valor_inicial': {'S': data}
     }
     nomes_atributo = {
-        '#dayetime': 'day&time'
+        '#dayetime': 'new_datetime'
     }
     
     resultado = dynamodb.scan(

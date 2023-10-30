@@ -35,10 +35,10 @@ def postar_resultado(raw_dict: dict):
         print(f'Erro na requisição. Código de status: {response.status_code}' )
 
 # Função para fazer a requisição GET com parâmetros "comeco" e "fim"
-def obter_resumo_do_dia(comeco, fim):
+def obter_resumo_do_dia(data):
     # URL para fazer a requisição GET com os parâmetros
     url = os.getenv('results_api')  # Substitua pela URL correta
-    parametros = {'comeco': comeco, 'fim': fim}
+    parametros = {'data': data}
 
     # Enviar a requisição GET com os parâmetros
     response = requests.get(url, json=parametros)
@@ -233,21 +233,15 @@ titulo_resumo = tk.Label(frame, text="Resumo")
 titulo_resumo.pack()
 
 # Labels e campos de entrada para a seção "Resumo"
-label_comeco = tk.Label(frame, text="Data de Início:")
-label_comeco.pack()
-entry_comeco = tk.Entry(frame)
-entry_comeco.pack()
-
-label_fim = tk.Label(frame, text="Data de Fim:")
-label_fim.pack()
-entry_fim = tk.Entry(frame)
-entry_fim.pack()
+label_data = tk.Label(frame, text="Data:")
+label_data.pack()
+entry_data = tk.Entry(frame)
+entry_data.pack()
 
 # Botão para obter o resumo do dia com parâmetros
 def obter_resumo_com_parametros():
-    comeco = entry_comeco.get()
-    fim = entry_fim.get()
-    obter_resumo_do_dia(comeco, fim)
+    data = entry_data.get()
+    obter_resumo_do_dia(str(data))
 
 # Botão para obter o resumo com parâmetros
 resumo_com_parametros_button = tk.Button(frame, text="Resumo do Dia", command=obter_resumo_com_parametros)

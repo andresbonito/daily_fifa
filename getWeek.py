@@ -67,7 +67,6 @@ def clean_data(raw_list: list):
     return new_raw_list
 
 def send_results(raw_list: list):
-    print(raw_list)
     vitorias = 0
     empates = 0
     derrotas = 0
@@ -80,16 +79,22 @@ def send_results(raw_list: list):
         gols_favor = int(item['gols_favor'])
         gols_contra = int(item['gols_contra'])
         moedas = int(item['moedas'])
+        penaltis = item['penaltis']
         
         if gols_favor > gols_contra:
             vitorias += 1
         elif gols_favor < gols_contra:
             derrotas += 1
-        elif gols_favor == gols_contra:
+        elif gols_favor == gols_contra and penaltis == '-':
             empates += 1
             
         if moedas == 0:
             quits += 1
+            
+        if penaltis == 'd':
+            derrotas += 1
+        elif penaltis == 'v':
+            vitorias += 1
         
         total_moedas += moedas
         gols_a_favor += gols_favor
