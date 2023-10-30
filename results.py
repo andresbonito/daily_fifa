@@ -115,6 +115,11 @@ def obter_resumo_por_semana(semana):
 # 
 # =======================
 
+# =========================
+# 
+# = = Formatação Janela = =
+# 
+# =========================
 
 # Cria a janela principal
 janela = tk.Tk()
@@ -122,12 +127,22 @@ janela.title("Daily FIFA")
 
 # Defina a largura e altura da janela
 largura_janela = 800
-altura_janela = 600
+altura_janela = 800
 janela.geometry(f"{largura_janela}x{altura_janela}")
 
 # Cria um frame para a seção "Resultado" e agrupa os elementos nesse frame
 frame_resultado = tk.Frame(janela)
-frame_resultado.pack(side="left", padx=100, pady=10, anchor="w")
+frame_resultado.pack(side="left", padx=50, pady=10, anchor="w")
+
+# Cria um frame para agrupar todos os elementos
+frame = tk.Frame(janela)
+frame.pack(side="right", padx=50, pady=10, anchor="e")
+
+# =======================
+# 
+# = = = = Funções = = = =
+# 
+# =======================
 
 # Título para a seção "Resultado"
 titulo_resultado = tk.Label(frame_resultado, text="Resultado")
@@ -212,10 +227,6 @@ resultado_label.pack()
 # = = = Resumo por Dia = = = 
 # 
 # ==========================
-
-# Cria um frame para agrupar todos os elementos
-frame = tk.Frame(janela)
-frame.pack(side="right", padx=100, pady=10, anchor="e")
 
 # Título para a seção "Resumo"
 titulo_resumo = tk.Label(frame, text="Resumo")
